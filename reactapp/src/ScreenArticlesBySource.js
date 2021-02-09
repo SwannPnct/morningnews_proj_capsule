@@ -13,12 +13,11 @@ function ScreenArticlesBySource() {
 
   useEffect(() => {
     (async () => {
-      
       const resRaw = await fetch(`http://newsapi.org/v2/top-headlines?sources=${id}&apiKey=b3a69ec6874a4479bd10c66d89f1a9ea`);
       const resJson = await resRaw.json();
       setData(resJson.articles)
     })()
-  },[])
+  })
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
