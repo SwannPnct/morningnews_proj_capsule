@@ -69,7 +69,7 @@ function ScreenMyArticles(props) {
 
             <div className="Card">       
 
-            {props.myArticles ? genArticles: <span>No articles</span>}         
+            {props.myArticles.length !== 0 ? genArticles: <span>No articles</span>}         
 
              </div>
       
