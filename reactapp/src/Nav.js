@@ -14,7 +14,7 @@ function Nav() {
         </Menu.Item>
 
         <Menu.Item key="test">
-          <Link to='/screenarticles'><Icon type="read" />My Articles</Link>
+          <Link to='/screenmyarticles'><Icon type="read" />My Articles</Link>
         </Menu.Item>
 
         <Menu.Item key="app">

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {useParams}  from 'react-router-dom';
+import {connect} from 'react-redux';
 import './App.css';
 import { Card, Icon, Modal, Button} from 'antd';
 import Nav from './Nav'
 
 const { Meta } = Card;
 
-function ScreenArticlesBySource() {
+function ScreenArticlesBySource(props) {
 
   const [data, setData] = useState([]);
   let {id} = useParams();
@@ -50,11 +51,11 @@ function ScreenArticlesBySource() {
                   />
                   }
                   actions={[
-                      <Button onClick={showModal}><Icon type="read" key="ellipsis2" /></Button>,
+                      <Icon type="read" key="ellipsis2" onClick={showModal}/>,
                       <Modal title={e.title} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
        <p>{e.content}</p> 
       </Modal>,
-                      <Icon type="like" key="ellipsis"/>
+                      <Icon type="like" key="ellipsis" onClick={() => props.addToWishList(e)}/>
                   ]}
                   >
 
@@ -94,4 +95,17 @@ function ScreenArticlesBySource() {
   );
 }
 
-export default ScreenArticlesBySource;
+function mapDispatchToProps(dispatch) {
+  return {
+    addToWishList: function(articleInfo) {
+      dispatch({type: "addArticle", 
+      info: articleInfo
+    })
+    }
+  }
+}
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(ScreenArticlesBySource);
