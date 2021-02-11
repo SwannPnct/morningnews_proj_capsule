@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const bcrypt = require('bcrypt');
+const uid2 = require('uid2');
 
 const UserModel = require('./db/user_model');
 
@@ -16,20 +18,21 @@ router.post('/sign-up', async (req,res,next) => {
     const newUser = new UserModel({
       username: req.body.username,
       email: req.body.email,
-      password: req.body.password
+      password: await bcrypt.hash(req.body.password, 15),
+      token: uid2(64)
     })
     const userSaved = await newUser.save();
-    res.json({result: true, userSaved});
+    res.json({result: true, token : userSaved.token});
   }
   
 })
 
 router.post('/sign-in', async (req,res,next) => {
-  const user = await UserModel.findOne({email: req.body.email, password: req.body.password});
+  const user = await UserModel.findOne({email: req.body.email});
   if (!user) {
     res.json({result: false})
   } else {
-    res.json({result: true, user})
+    await bcrypt.compare(req.body.password, user.password) ? res.json({result: true, token: user.token}) : res.json({result: false});
   }
 })
 

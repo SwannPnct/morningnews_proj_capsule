@@ -9,21 +9,15 @@ const { Meta } = Card;
 function ScreenMyArticles(props) {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-
   const showModal = () => {
     setIsModalVisible(true);
   };
-
   const handleOk = () => {
     setIsModalVisible(false);
   };
-
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-
-  console.log(props.myArticles);
-
 
   const genArticles = props.myArticles.map((e,idx) => {
     return(

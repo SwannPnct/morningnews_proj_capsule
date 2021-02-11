@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import {Redirect} from 'react-router-dom';
+import {connect} from 'react-redux';
 import './App.css';
 import {Input,Button} from 'antd';
 
-function ScreenHome() {
+function ScreenHome(props) {
 
   const [nameSU, setNameSU] = useState('');
   const [emailSU, setEmailSU] = useState('');
@@ -24,6 +25,7 @@ function ScreenHome() {
       }).then(async (res) => {
         const json = await res.json();
         if(json.result) {
+          props.shareToken(json.token);
           setIsLogged(true);
           setSuError(false);
         } else {
@@ -40,6 +42,7 @@ function ScreenHome() {
       }).then(async (res) => {
         const json = await res.json();
         if(json.result) {
+          props.shareToken(json.token);
           setIsLogged(true);
           setSiError(false);
         } else {
@@ -94,4 +97,12 @@ function ScreenHome() {
  
 }
 
-export default ScreenHome;
+function mapDispatchToProps(dispatch) {
+  return {
+    shareToken: function(token) {
+      dispatch({type: "tokenSharing", token})
+    }
+  }
+}
+
+export default connect(null, mapDispatchToProps)(ScreenHome);

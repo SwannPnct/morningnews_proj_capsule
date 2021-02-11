@@ -20,7 +20,10 @@ function ScreenSource() {
     <div>
         <Nav/>
        
-       <div className="Banner"/>
+       <div className="Banner">
+       <span class="flag-icon flag-icon-fr"></span>
+       <span class="flag-icon flag-icon-uk"></span>
+       </div>
 
        <div className="HomeThemes">
           

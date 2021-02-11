@@ -8,10 +8,11 @@ import ScreenArticlesBySource from './ScreenArticlesBySource';
 import ScreenMyArticles from './ScreenMyArticles';
 
 import myArticles from './reducers/article.reducer';
+import token from './reducers/token.reducer';
 import {Provider} from 'react-redux';
 import {createStore, combineReducers} from 'redux';
 
-const store = createStore(combineReducers({myArticles}));
+const store = createStore(combineReducers({myArticles, token}));
 
 
 function App() {
