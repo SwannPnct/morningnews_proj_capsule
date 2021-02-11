@@ -66,4 +66,16 @@ h4 {
   background-color: lightpink;
 }
 
+.flagged {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flag-icon {
+  width: 65px;
+  margin: 10px;
+  border-radius: 50%;
+}
+
 

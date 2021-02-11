@@ -1,28 +1,39 @@
 import React,{useState, useEffect} from 'react';
+import {connect} from 'react-redux';
 import './App.css';
 import { List, Avatar} from 'antd';
 import Nav from './Nav';
 import { Link } from 'react-router-dom';
 
-function ScreenSource() {
+function ScreenSource(props) {
 
   const [data, setData] = useState([]);
+  
+  const flagList = ["fr","gb","pt","es","ie","it","kr"];
+  const styleFlagSelected = {
+    border: "5px solid #44FDB1"
+  }
+
+  const genFlags = flagList.map((flag) => {
+    return(
+      <img className="flag-icon" alt={"flag-"+flag} src={"/images/flags/"+flag+".svg"} onClick={() => props.handleFlagSelection(flag)} style={flag === props.flagSelected ? styleFlagSelected : {}}></img>
+    )
+  })
 
   useEffect(() => {
     (async () => {
-      const resRaw = await fetch("http://newsapi.org/v2/sources?country=fr&apiKey=b3a69ec6874a4479bd10c66d89f1a9ea");
+      const resRaw = await fetch("http://newsapi.org/v2/sources?country="+props.flagSelected+"&apiKey=b3a69ec6874a4479bd10c66d89f1a9ea");
       const resJson = await resRaw.json();
       setData(resJson.sources);
     })()
-  },[])
+  },[props.flagSelected])
 
   return (
     <div>
         <Nav/>
        
-       <div className="Banner">
-       <span class="flag-icon flag-icon-fr"></span>
-       <span class="flag-icon flag-icon-uk"></span>
+       <div className="Banner flagged">
+       {genFlags}
        </div>
 
        <div className="HomeThemes">
@@ -48,4 +59,18 @@ function ScreenSource() {
   );
 }
 
-export default ScreenSource;
+function mapDispatchToProps(dispatch) {
+  return {
+    handleFlagSelection: function(flag) {
+      dispatch({type: "flagSelection", flag})
+    }
+  }
+}
+
+function mapStateToProps(state) {
+  return {
+    flagSelected : state.flagSelected
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(ScreenSource);

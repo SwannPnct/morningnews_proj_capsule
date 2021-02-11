@@ -9,10 +9,11 @@ import ScreenMyArticles from './ScreenMyArticles';
 
 import myArticles from './reducers/article.reducer';
 import token from './reducers/token.reducer';
+import flagSelected from './reducers/flag.reducer';
 import {Provider} from 'react-redux';
 import {createStore, combineReducers} from 'redux';
 
-const store = createStore(combineReducers({myArticles, token}));
+const store = createStore(combineReducers({myArticles, token, flagSelected}));
 
 
 function App() {
