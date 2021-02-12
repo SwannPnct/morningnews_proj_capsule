@@ -1,5 +1,13 @@
 const mongoose = require('mongoose');
 
+const wishlistSchema = new moongoose.Schema({
+    title : String,
+    content : String,
+    description : String,
+    url : String
+
+})
+
 const userSchema = new mongoose.Schema({
     username : {
         type: String,
@@ -17,7 +25,9 @@ const userSchema = new mongoose.Schema({
     token: {
         type: String,
         unique: true
-    }
+    },
+    wishlist : [wishlistSchema],
+    country : String
 })
 
 const UserModel = mongoose.model('user', userSchema);
