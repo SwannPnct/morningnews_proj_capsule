@@ -19,7 +19,9 @@ router.post('/sign-up', async (req,res,next) => {
       username: req.body.username,
       email: req.body.email,
       password: await bcrypt.hash(req.body.password, 15),
-      token: uid2(64)
+      token: uid2(64),
+      wishlist : [],
+      country : "fr"
     })
     const userSaved = await newUser.save();
     res.json({result: true, token : userSaved.token});
@@ -52,5 +54,22 @@ router.post('/wish-list', async (req, res, next) => {
   const updated = await user.save()
 })
 
+router.get('/get-country', async (req,res,next) => {
+  try {
+    const foundUser = await UserModel.findOne({token: req.query.token});
+    foundUser ? res.json({result: true, foundUser}) : res.json({result: false})
+  } catch (error) {
+    res.json({result: false, error})
+  }
+})
+
+router.put('/update-country', async (req,res,next) => {
+  try {
+    const foundUser = await UserModel.findOneAndUpdate({token: req.body.token},{country: req.body.country});
+    res.json({result: foundUser? true : false})
+  } catch (error) {
+    res.json({result: false, error})
+  }
+})
 
 module.exports = router;

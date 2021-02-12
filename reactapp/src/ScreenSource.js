@@ -16,15 +16,29 @@ function ScreenSource(props) {
 
   const genFlags = flagList.map((flag) => {
     return(
-      <img className="flag-icon" alt={"flag-"+flag} src={"/images/flags/"+flag+".svg"} onClick={() => props.handleFlagSelection(flag)} style={flag === props.flagSelected ? styleFlagSelected : {}}></img>
+      <img className="flag-icon" alt={"flag-"+flag} src={"/images/flags/"+flag+".svg"} onClick={() => props.handleFlagSelection(flag, props.token)} style={flag === props.flagSelected ? styleFlagSelected : {}}></img>
     )
   })
 
   useEffect(() => {
     (async () => {
       const resRaw = await fetch("http://newsapi.org/v2/sources?country="+props.flagSelected+"&apiKey=fe029808a40c4dbfaae679aadccf71a1");
+        const res = await fetch('/get-country?token='+props.token);
+        const resJson = await res.json();
+        props.handleFlagSelection(resJson.foundUser.country, props.token);
+    })()
+  },[])
+
+  useEffect(() => {
+    (async () => {
+      const resRaw = await fetch("http://newsapi.org/v2/sources?country="+props.flagSelected+"&apiKey=b3a69ec6874a4479bd10c66d89f1a9ea");
       const resJson = await resRaw.json();
       setData(resJson.sources);
+      await fetch('/update-country', {
+          method: "PUT",
+          headers: {'Content-Type':'application/x-www-form-urlencoded'},
+          body: "country=" + props.flagSelected + "&token=" + props.token
+        });
     })()
   },[props.flagSelected])
 
@@ -61,15 +75,16 @@ function ScreenSource(props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    handleFlagSelection: function(flag) {
-      dispatch({type: "flagSelection", flag})
+    handleFlagSelection: function(flag,token) {
+      dispatch({type: "flagSelection", flag, token})
     }
   }
 }
 
 function mapStateToProps(state) {
   return {
-    flagSelected : state.flagSelected
+    flagSelected : state.flagSelected,
+    token : state.token
   }
 }
 
