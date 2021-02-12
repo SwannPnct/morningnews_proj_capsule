@@ -48,11 +48,17 @@ router.post('/wish-list', async (req, res, next) => {
     title : req.body.wishlist.title,
     content : req.body.wishlist.content,
     description : req.body.wishlist.description,
-    url : req.body.wishlist.url
+    url : req.body.wishlist.urlToImage
   })
   
   const updated = await user.save()
 })
+
+router.get('/screen-articles', async (req,res,next) => {
+var user = await UserModel.findOne({token: req.query.token})
+res.json({result: true, user})
+})
+
 
 router.get('/get-country', async (req,res,next) => {
   try {

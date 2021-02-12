@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import './App.css';
 import { Card, Icon, Modal, Button} from 'antd';
@@ -8,6 +8,7 @@ const { Meta } = Card;
 
 function ScreenMyArticles(props) {
 
+  const [myArticles, setmyArticles] = useState ([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const showModal = () => {
     setIsModalVisible(true);
@@ -19,7 +20,17 @@ function ScreenMyArticles(props) {
     setIsModalVisible(false);
   };
 
-  const genArticles = props.myArticles.map((e,idx) => {
+
+  useEffect(() => { ( async () => {
+    const res = await fetch('/screen-articles?token='+props.token);
+    const response = await res.json();
+    setmyArticles (response.user.wishlist)
+  })()
+},[])
+
+
+  const genArticles = myArticles.map((e,idx) => {
+    console.log(e);
     return(
       <div  style={{display:'flex',justifyContent:'center'}}>
       <Card
@@ -32,7 +43,7 @@ function ScreenMyArticles(props) {
                   cover={
                   <img
                       alt="example"
-                      src={e.urlToImage}
+                      src={e.url}
                   />
                   }
                   actions={[
@@ -40,7 +51,7 @@ function ScreenMyArticles(props) {
                       <Modal title={e.title} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
        <p>{e.content}</p> 
       </Modal>,
-                      <Icon type="close" key="ellipsis" onClick={() => props.deleteFromWishList(idx)}/>
+                      <Icon type="close" key="ellipsis" onClick={() => deleteFromWishList(idx)}/>
                   ]}
                   >
 
@@ -63,7 +74,7 @@ function ScreenMyArticles(props) {
 
             <div className="Card">       
 
-            {props.myArticles.length !== 0 ? genArticles: <span>No articles</span>}         
+            {myArticles.length !== 0 ? genArticles: <span>No articles</span>}         
 
              </div>
       
@@ -75,7 +86,8 @@ function ScreenMyArticles(props) {
 
 function mapStateToProps(state) {
   return {
-    myArticles: state.myArticles
+    myArticles: state.myArticles,
+    token: state.token
   }
 }
 

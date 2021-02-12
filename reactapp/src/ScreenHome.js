@@ -41,6 +41,7 @@ function ScreenHome(props) {
       body: 'email='+emailSI+'&password='+passwordSI
       }).then(async (res) => {
         const json = await res.json();
+        console.log(json.token)
         if(json.result) {
           props.shareToken(json.token);
           setIsLogged(true);
@@ -50,6 +51,8 @@ function ScreenHome(props) {
         }
       });
   }
+  
+
 
   if (isLogged) {
     return(
