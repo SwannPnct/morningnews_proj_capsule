@@ -8,6 +8,7 @@ import Nav from './Nav'
 const { Meta } = Card;
 
 function ScreenArticlesBySource(props) {
+  console.log(props.token);
   const [data, setData] = useState([]);
   let {id} = useParams();
 
@@ -17,7 +18,7 @@ function ScreenArticlesBySource(props) {
       const resJson = await resRaw.json();
       setData(resJson.articles)
     })()
-  })
+  }, [])
   const [isModalVisible, setIsModalVisible] = useState(false);
   const showModal = () => {
     setIsModalVisible(true);
