@@ -10,6 +10,7 @@ const { Meta } = Card;
 function ScreenArticlesBySource(props) {
 
 
+  console.log(props.token);
   const [data, setData] = useState([]);
   let {id} = useParams();
 

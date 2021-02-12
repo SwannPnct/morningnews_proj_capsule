@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import './App.css';
 import { List, Avatar} from 'antd';
 import Nav from './Nav';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 function ScreenSource(props) {
 
@@ -22,8 +22,9 @@ function ScreenSource(props) {
 
   useEffect(() => {
     (async () => {
-      const resRaw = await fetch("http://newsapi.org/v2/sources?country="+props.flagSelected+"&apiKey=fe029808a40c4dbfaae679aadccf71a1");
+        await fetch("http://newsapi.org/v2/sources?country="+props.flagSelected+"&apiKey=fe029808a40c4dbfaae679aadccf71a1");
         const res = await fetch('/get-country?token='+props.token);
+        console.log(props.token);
         const resJson = await res.json();
         props.handleFlagSelection(resJson.foundUser.country, props.token);
     })()
@@ -42,36 +43,36 @@ function ScreenSource(props) {
     })()
   },[props.flagSelected])
 
-  return (
-    <div>
-        <Nav/>
-       
-       <div className="Banner flagged">
-       {genFlags}
-       </div>
-
-       <div className="HomeThemes">
-          
-              <List
-                  itemLayout="horizontal"
-                  dataSource={data}
-                  renderItem={item => (
-                    <List.Item>
-                      <List.Item.Meta
-                        avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                        title={<Link to={"/screenarticlesbysource/"+item.id}>{item.name}</Link>}
-                        description={item.description}
-                      />
-                    </List.Item>
-                  )}
-                />
-
-
-          </div>
-                 
-      </div>
-  );
-}
+    return (
+      <div>
+          <Nav/>
+         
+         <div className="Banner flagged">
+         {genFlags}
+         </div>
+  
+         <div className="HomeThemes">
+            
+                <List
+                    itemLayout="horizontal"
+                    dataSource={data}
+                    renderItem={item => (
+                      <List.Item>
+                        <List.Item.Meta
+                          avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                          title={<Link to={"/screenarticlesbysource/"+item.id}>{item.name}</Link>}
+                          description={item.description}
+                        />
+                      </List.Item>
+                    )}
+                  />
+  
+  
+            </div>
+                   
+        </div>
+    );
+  }
 
 function mapDispatchToProps(dispatch) {
   return {
