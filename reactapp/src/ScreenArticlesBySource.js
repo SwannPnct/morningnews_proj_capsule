@@ -8,13 +8,12 @@ import Nav from './Nav'
 const { Meta } = Card;
 
 function ScreenArticlesBySource(props) {
-
   const [data, setData] = useState([]);
   let {id} = useParams();
 
   useEffect(() => {
     (async () => {
-      const resRaw = await fetch(`http://newsapi.org/v2/top-headlines?sources=${id}&apiKey=b3a69ec6874a4479bd10c66d89f1a9ea`);
+      const resRaw = await fetch(`http://newsapi.org/v2/top-headlines?sources=${id}&apiKey=fe029808a40c4dbfaae679aadccf71a1`);
       const resJson = await resRaw.json();
       setData(resJson.articles)
     })()
@@ -30,7 +29,22 @@ function ScreenArticlesBySource(props) {
     setIsModalVisible(false);
   };
 
-  const articles = data.map((e) => {
+  const addWishlistElement = (wishlistElement) => {
+    fetch('/wish-list', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        token: props.token,
+        wishlist: wishlistElement
+      })
+    })
+    .then((response) => response.json())
+    // .then(() => {
+    //   props.addToWishList(wishlistElement)
+    // })
+  }
+
+  const articles = data.map((article) => {
     return(
       <div  style={{display:'flex',justifyContent:'center'}}>
       <Card
@@ -43,21 +57,22 @@ function ScreenArticlesBySource(props) {
                   cover={
                   <img
                       alt="example"
-                      src={e.urlToImage}
+                      src={article.urlToImage}
                   />
                   }
                   actions={[
                       <Icon type="read" key="ellipsis2" onClick={showModal}/>,
-                      <Modal title={e.title} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-       <p>{e.content}</p> 
+                      <Modal title={article.title} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+       <p>{article.content}</p> 
       </Modal>,
-                      <Icon type="like" key="ellipsis" onClick={() => props.addToWishList(e)}/>
+                      <Icon type="like" key="ellipsis" onClick={() => addWishlistElement(article)}/>
+                      // <Icon type="like" key="ellipsis" onClick={() => props.addToWishList(e)}/>
                   ]}
                   >
 
                   <Meta
-                    title={e.title}
-                    description={e.description.slice(0,100) + "..."}
+                    title={article.title}
+                    description={article.description.slice(0,100) + "..."}
                   />
 
                 </Card>
@@ -91,6 +106,17 @@ function ScreenArticlesBySource(props) {
   );
 }
 
+// Token est stocké dans store redux
+// mapStateToProps permet de récuperer des elements du store et de les ajouter en props au composant ( token )
+// depuis le composant, possibilité d'utiliser "props"
+
+
+function mapStateToProps(state) {
+  // const { todos } = store
+  console.log(state)
+  return { token: state.token }
+}
+
 function mapDispatchToProps(dispatch) {
   return {
     addToWishList: function(articleInfo) {
@@ -103,5 +129,5 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(
   null,
-  mapDispatchToProps
+  mapDispatchToProps, mapStateToProps
 )(ScreenArticlesBySource);

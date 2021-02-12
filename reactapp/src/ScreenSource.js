@@ -22,7 +22,7 @@ function ScreenSource(props) {
 
   useEffect(() => {
     (async () => {
-      const resRaw = await fetch("http://newsapi.org/v2/sources?country="+props.flagSelected+"&apiKey=b3a69ec6874a4479bd10c66d89f1a9ea");
+      const resRaw = await fetch("http://newsapi.org/v2/sources?country="+props.flagSelected+"&apiKey=fe029808a40c4dbfaae679aadccf71a1");
       const resJson = await resRaw.json();
       setData(resJson.sources);
     })()

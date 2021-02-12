@@ -24,16 +24,33 @@ router.post('/sign-up', async (req,res,next) => {
     const userSaved = await newUser.save();
     res.json({result: true, token : userSaved.token});
   }
-  
 })
 
 router.post('/sign-in', async (req,res,next) => {
   const user = await UserModel.findOne({email: req.body.email});
+
   if (!user) {
     res.json({result: false})
   } else {
     await bcrypt.compare(req.body.password, user.password) ? res.json({result: true, token: user.token}) : res.json({result: false});
   }
 })
+
+router.post('/wish-list', async (req, res, next) => {
+  console.log(req.body);
+  const user = await UserModel.findOne({token: req.body.token});
+  console.log(req.body.token);
+  if(!user) throw new Error('User not found')
+
+  user.wishlist.push({
+    title : req.body.wishlist.title,
+    content : req.body.wishlist.content,
+    description : req.body.wishlist.description,
+    url : req.body.wishlist.url
+  })
+  
+  const updated = await user.save()
+})
+
 
 module.exports = router;

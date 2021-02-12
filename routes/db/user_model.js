@@ -1,11 +1,10 @@
 const mongoose = require('mongoose');
 
-const wishlistSchema = new moongoose.Schema({
+const wishlistSchema = mongoose.Schema({
     title : String,
     content : String,
     description : String,
     url : String
-
 })
 
 const userSchema = new mongoose.Schema({
