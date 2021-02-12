@@ -5,7 +5,8 @@ const wishlistSchema = mongoose.Schema({
     title : String,
     content : String,
     description : String,
-    url : String
+    url : String,
+    country: String
 })
 
 const userSchema = new mongoose.Schema({

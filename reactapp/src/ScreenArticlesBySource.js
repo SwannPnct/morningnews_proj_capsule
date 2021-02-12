@@ -32,13 +32,14 @@ function ScreenArticlesBySource(props) {
     setIsModalVisible(false);
   };
 
-  const addWishlistElement = (wishlistElement) => {
+  const addWishlistElement = (wishlistElement, flag) => {
     fetch('/wish-list', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
         token: props.token,
-        wishlist: wishlistElement
+        wishlist: wishlistElement,
+        flag
       })
     })
     .then((response) => response.json())
@@ -70,7 +71,7 @@ function ScreenArticlesBySource(props) {
                       <Modal title={article.title} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
        <p>{article.content}</p> 
       </Modal>,
-                      <Icon type="like" key="ellipsis" onClick={() => addWishlistElement(article)}/>
+                      <Icon type="like" key="ellipsis" onClick={() => addWishlistElement(article,props.flagSelected)}/>
                       // <Icon type="like" key="ellipsis" onClick={() => props.addToWishList(e)}/>
                   ]}
                   >
@@ -119,7 +120,8 @@ function ScreenArticlesBySource(props) {
 function mapStateToProps(state) {
   // const { todos } = store
  
-  return { token: state.token }
+  return { token: state.token ,
+          flagSelected: state.flagSelected}
 }
 
 function mapDispatchToProps(dispatch) {

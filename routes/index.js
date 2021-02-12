@@ -40,16 +40,20 @@ router.post('/sign-in', async (req,res,next) => {
 
 router.post('/wish-list', async (req, res, next) => {
   const user = await UserModel.findOne({token: req.body.token});
-  if(!user) throw new Error('User not found')
-
+  if(!user) {
+    res.json({result: false});
+    return;
+  }
   user.wishlist.push({
     title : req.body.wishlist.title,
     content : req.body.wishlist.content,
     description : req.body.wishlist.description,
-    url : req.body.wishlist.urlToImage
+    url : req.body.wishlist.urlToImage,
+    country: req.body.flag
   })
   
   const updated = await user.save()
+  res.json({result:true, user: updated})
 })
 
 router.get('/screen-articles', async (req,res,next) => {
