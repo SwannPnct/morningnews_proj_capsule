@@ -56,7 +56,7 @@ function ScreenHome(props) {
 
   if (isLogged) {
     return(
-      <Redirect to='/screensource'/>
+      <Redirect to='/screenmyarticles'/>
     )
   } else {
     return (

@@ -39,9 +39,7 @@ router.post('/sign-in', async (req,res,next) => {
 })
 
 router.post('/wish-list', async (req, res, next) => {
-  console.log(req.body);
   const user = await UserModel.findOne({token: req.body.token});
-  console.log(req.body.token);
   if(!user) throw new Error('User not found')
 
   user.wishlist.push({
@@ -57,6 +55,13 @@ router.post('/wish-list', async (req, res, next) => {
 router.get('/screen-articles', async (req,res,next) => {
 var user = await UserModel.findOne({token: req.query.token})
 res.json({result: true, user})
+})
+
+router.put('/delete-article', async (req,res,next) =>  {
+  const user = await UserModel.findOne({token: req.body.token});
+  user.wishlist.splice(req.body.index, 1);
+  const saved = await user.save();
+  res.json({result: true, saved})
 })
 
 

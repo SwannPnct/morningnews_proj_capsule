@@ -7,8 +7,10 @@ import Nav from './Nav'
 const { Meta } = Card;
 
 function ScreenMyArticles(props) {
+  
 
   const [myArticles, setmyArticles] = useState ([]);
+  console.log(myArticles);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const showModal = () => {
     setIsModalVisible(true);
@@ -27,6 +29,16 @@ function ScreenMyArticles(props) {
     setmyArticles (response.user.wishlist)
   })()
 },[])
+
+async function deleteFromWishList(idx) {
+  const res = await fetch('/delete-article', {
+    method: 'PUT',
+    headers: {'Content-Type':'application/x-www-form-urlencoded'},
+    body : "index=" + idx + "&token="+ props.token
+  })
+  const resJson = await res.json();
+  setmyArticles(resJson.saved.wishlist);
+}
 
 
   const genArticles = myArticles.map((e,idx) => {
